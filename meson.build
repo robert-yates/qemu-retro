@@ -3837,7 +3837,7 @@ foreach target : target_dirs
     target_inc += include_directories('linux-headers', is_system: true)
     link_args += ['-ldl', '-lX11', '-lXxf86vm', '-lGL']
   endif
-  if targetos == 'darwin'
+  if host_os == 'darwin'
     c_args += ['-I/opt/X11/include']
     link_args += ['-L/opt/X11/lib', '-lX11', '-lXxf86vm', '-lGL', '-Wl,-framework,OpenGL']
   endif
