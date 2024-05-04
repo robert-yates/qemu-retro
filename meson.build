@@ -1423,6 +1423,7 @@ else
     error('sdl-image required, but SDL was @0@'.format(
           get_option('sdl').disabled() ? 'disabled' : 'not found'))
   endif
+  error('Featuring qemu-3dfx required SDL2')
   sdl_image = not_found
 endif
 
@@ -3492,6 +3493,8 @@ if have_system or have_user
                          arguments: ['@INPUT@', '@EXTRA_ARGS@', '-o', '@OUTPUT@'])
   subdir('libdecnumber')
   subdir('target')
+  subdir('hw/3dfx')
+  subdir('hw/mesa')
 endif
 
 subdir('audio')
@@ -3832,6 +3835,11 @@ foreach target : target_dirs
   target_inc = [include_directories('target' / config_target['TARGET_BASE_ARCH'])]
   if host_os == 'linux'
     target_inc += include_directories('linux-headers', is_system: true)
+    link_args += ['-ldl', '-lX11', '-lXxf86vm', '-lGL']
+  endif
+  if targetos == 'darwin'
+    c_args += ['-I/opt/X11/include']
+    link_args += ['-L/opt/X11/lib', '-lX11', '-lXxf86vm', '-lGL', '-Wl,-framework,OpenGL']
   endif
   if target.endswith('-softmmu')
     target_type='system'
