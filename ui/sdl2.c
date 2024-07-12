@@ -841,13 +841,8 @@ static struct sdl_console_cb {
 } scon_cb;
 static void sdl_gui_restart(struct sdl2_console *scon, SDL_Surface *icon)
 {
-    int top = 0;
-    if (!gui_fullscreen) {
+    if (!gui_fullscreen)
         SDL_GetWindowPosition(scon->real_window, &scon->x, &scon->y);
-#ifndef CONFIG_WIN32
-        SDL_GetWindowBordersSize(scon->real_window, &top, 0, 0, 0);
-#endif
-    }
     fxui_grab_val(0x80 | gui_grab);
     sdl_grab_end(scon);
     sdl2_window_destroy(scon);
@@ -855,7 +850,7 @@ static void sdl_gui_restart(struct sdl2_console *scon, SDL_Surface *icon)
     if (icon)
         SDL_SetWindowIcon(scon->real_window, icon);
     if (!gui_fullscreen)
-        SDL_SetWindowPosition(scon->real_window, scon->x, scon->y - top);
+        SDL_SetWindowPosition(scon->real_window, scon->x, scon->y);
 }
 static void sched_wndproc(void *opaque)
 {
